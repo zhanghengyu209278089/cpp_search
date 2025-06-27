@@ -5,5 +5,5 @@
 [https://zhanghengyu209278089.github.io/cpp_search/search.html](https://zhanghengyu209278089.github.io/cpp_search/search.html)
 # 获取代码
 ```cmd
-curl https://zhanghengyu209278089.github.io/cpp_search/search.html
+curl https://zhanghengyu209278089.github.io/cpp_search/search.html > search.html
 ```
