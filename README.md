@@ -3,7 +3,3 @@
 # 使用方法
 访问以下网址
 [https://zhanghengyu209278089.github.io/cpp_search/search.html](https://zhanghengyu209278089.github.io/cpp_search/search.html)
-# 获取代码
-```cmd
-curl https://zhanghengyu209278089.github.io/cpp_search/search.html > search.html
-```
