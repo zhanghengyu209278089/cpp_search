@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPP SEARCH</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #3385ff;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2em;
+        }
+        .search-container input {
+            padding: 0.8em;
+            width: 60%;
+            margin-right: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        .search-container button {
+            padding: 0.8em 1.5em;
+            border: none;
+            border-radius: 4px;
+            background-color: #3385ff;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .search-container button:hover {
+            background-color: #2a6fd3;
+        }
+        .results {
+            padding: 1em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .result {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1em;
+            padding: 1.2em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result h3 {
+            margin: 0 0 0.5em 0;
+            font-size: 1.2em;
+        }
+        .result a {
+            color: #3385ff;
+            text-decoration: none;
+        }
+        .result a:hover {
+            text-decoration: underline;
+        }
+        .no-results {
+            text-align: center;
+            padding: 2em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CPP SEARCH</h1>
+    </header>
+    <div class="search-container">
+        <input type="text" id="searchQuery" placeholder="输入搜索关键词..." autofocus>
+        <button onclick="search()">搜索</button>
+    </div>
+    <div class="results" id="results"></div>
+
+    <script>
+        const data = [
+            { "url": "https://ai.hao.360.com/discover", "title": "AI导航_精选优质AI内容，和你一起遇见未来" },
+            { "url": "https://auto.360.cn", "title": "360汽车_最懂你的汽车网站，迈腾，卡罗拉新款抢先看" },
+            { "url": "https://feedback.hao.360.cn", "title": "问题反馈_360导航" },
+            { "url": "https://fun.360.cn", "title": "360小游戏，邀你好玩" },
+            { "url": "https://hao.360.com", "title": "360导航_一个主页，整个世界" },
+            { "url": "https://huabao.360.cn/pc/web/360huabao.html", "title": "360壁纸" },
+            { "url": "https://junshi.hao.360.cn", "title": "军事频道_360导航上网主页" },
+            { "url": "https://keji.hao.360.cn", "title": "科技频道_360导航上网主页" },
+            { "url": "https://ly.so.com", "title": "良医_安全、干净、专业的医疗健康搜索引擎" },
+            { "url": "https://sports.hao.360.cn", "title": "体育频道_360导航上网主页" },
+            { "url": "https://www.360kan.com", "title": "360影视-更新更全更受欢迎的影视网站-在线观看" },
+            { "url": "https://www.360kuai.com", "title": "快资讯_你的专属资讯平台" },
+            { "url": "https://www.so.com", "title": "360搜索，SO靠谱" },
+            { "url": "https://young.hao.360.com", "title": "360导航少年版_让家长放心，对孩子有用" },
+            { "url": "https://yunpan.360.cn", "title": "360AI云盘官网" },
+	    { "url": "http://ai.baidu.com/index/", "title": "百度AI开放平台" },
+            { "url": "http://app.baidu.com/", "title": "百度应用中心" },
+            { "url": "http://baijiahao.baidu.com/", "title": "百度百家号" },
+            { "url": "http://baike.baidu.com/", "title": "百度百科" },
+            { "url": "http://baobao.baidu.com", "title": "百度宝宝知道" },
+            { "url": "http://cbbs.baidu.com", "title": "百度贴吧客户端" },
+            { "url": "http://ce.baidu.com/?from=more", "title": "百度商业服务" },
+            { "url": "http://developer.baidu.com/", "title": "百度开发者中心" },
+            { "url": "http://duer.baidu.com/", "title": "百度DuerOS" },
+            { "url": "http://e.baidu.com/ebaidu/home?refer=8", "title": "百度企业服务" },
+            { "url": "http://fanyi.baidu.com/", "title": "百度翻译" },
+            { "url": "http://haokan.baidu.com", "title": "百度好看视频" },
+            { "url": "http://image.baidu.com/", "title": "百度图片" },
+            { "url": "http://jingyan.baidu.com/", "title": "百度经验" },
+            { "url": "http://map.baidu.com", "title": "百度地图" },
+            { "url": "http://news.baidu.com/", "title": "百度新闻" },
+            { "url": "http://pan.baidu.com/", "title": "百度网盘" },
+            { "url": "http://tieba.baidu.com/", "title": "百度贴吧" },
+            { "url": "http://wenku.baidu.com/", "title": "百度文库" },
+            { "url": "http://www.baidu.com", "title": "百度首页" },
+
+	{ "url": "https://search.cctv.com/search.php?qtext=%E4%B8%80%E7%BA%BF&type=video", "title": "央视网搜索" },
+            { "url": "https://search.cctv.com/search.php?qtext=%E4%BB%8A%E6%97%A5%E5%85%B3%E6%B3%A8&type=video", "title": "央视网搜索" },
+            { "url": "https://search.cctv.com/search.php?qtext=%E4%BB%8A%E6%97%A5%E8%AF%B4%E6%B3%95&type=video", "title": "央视网搜索" },
+            { "url": "https://search.cctv.com/search.php?qtext=%E4%BB%A5%E6%B3%95%E4%B9%8B%E5%90%8D&type=video", "title": "央视网搜索" },
+            { "url": "https://search.cctv.com/search.php?qtext=%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5&type=video", "title": "央视网搜索" },
+            { "url": "https://search.cctv.com/search.php?qtext=%E5%A4%A9%E7%BD%91&type=video", "title": "央视网搜索" },
+            { "url": "https://search.cctv.com/search.php?qtext=%E6%96%B0%E9%97%BB%E5%91%A8%E5%88%8A&type=video", "title": "央视网搜索" },
+            { "url": "https://search.cctv.com/search.php?qtext=%E6%96%B0%E9%97%BB%E8%81%94%E6%92%AD&type=video", "title": "央视网搜索" },
+            { "url": "https://search.cctv.com/search.php?qtext=%E6%B5%B7%E5%B3%A1%E4%B8%A4%E5%B2%B8&type=video", "title": "央视网搜索" },
+            { "url": "https://search.cctv.com/search.php?qtext=%E7%99%BE%E5%AE%B6%E8%AE%B2%E5%9D%9B&type=video", "title": "央视网搜索" },
+            { "url": "https://tv.cctv.com/", "title": "CCTV节目官网_央视网" },
+            { "url": "https://tv.cctv.com/2013/05/03/VIDE1367569459114887.shtml", "title": "《我是特种兵之利刃出鞘》 第1集" },
+            { "url": "https://tv.cctv.com/2016/01/15/VIDEAwo0hSB1RlhCngW5eBpJ160115.shtml", "title": "《陆军一号》 第1集" },
+            { "url": "https://tv.cctv.com/2022/09/18/VIDEH1EwtGT659iY7yqOgM3e220918.shtml", "title": "《太行英雄传》 第1集" },
+            { "url": "https://tv.cctv.com/2024/12/01/VIDEDSv7VKYjiPZJq2dxoVst241201.shtml", "title": "《城市风华录》 20241201 苏州" },
+            { "url": "https://tv.cctv.com/2024/12/08/VIDE5eJq9Mu5E2nv36yyF7QN241208.shtml", "title": "《简牍探中华》第二季 20241208 清华简" },
+            { "url": "https://tv.cctv.com/2024/12/22/VIDEyTqwEL2omFQuEviN9Y00241222.shtml", "title": "《非遗里的中国》第三季 20241221" },
+            { "url": "https://tv.cctv.com/2024/12/29/VIDEA6or3t0SkDRCBKZEwZVU241229.shtml", "title": "《三餐四季》第二季 20241229 新疆篇" },
+            { "url": "https://tv.cctv.com/2025/01/02/VIDE81xSk4SbYdWWIh6oViWJ250102.shtml", "title": "《文脉春秋·历史文化名城篇》 第36集 广西·柳州" },
+            { "url": "https://tv.cctv.com/2025/04/03/VIDEhCJB3s2h5sPwS6ISusAM250403.shtml", "title": "《中国书法大会》第二季 20250323 第一集" },
+            { "url": "https://tv.cctv.com/2025/05/29/VIDE8P4Po2MphYEFZFMxLytg250529.shtml", "title": "《“字”从遇见你 第三季》 第1集 气" },
+            { "url": "https://tv.cctv.com/2025/06/13/VIDEgXTjRdDIjjDvU14vhYLK250613.shtml", "title": "《重生技 第二季》 第1集 珐华出水技" },
+            { "url": "https://tv.cctv.com/2025/06/18/VIDEps4RHPCl4rLlctQjmDAp250618.shtml", "title": "《诗美成都》 第1集 李白A计划" },
+            { "url": "https://tv.cctv.com/2025/06/18/VIDEs16umy7BqPWjTIgzXy88250618.shtml", "title": "《2025校长有话说》 第1集 高校招生季 特别节目" },
+            { "url": "https://tv.cctv.com/2025/06/20/VIDEIkjkAUfe5rQ43UZUYypL250620.shtml", "title": "《动物园里有什么》 20250620" },
+            { "url": "https://tv.cctv.com/2025/06/21/VIDEeYo7pme66ad6QxgdY0p7250621.shtml", "title": "《石家河》 第1集 文源" },
+            { "url": "https://tv.cctv.com/2025/06/23/VIDEYbW4ZaCPv4bjeVYJ9fJt250623.shtml", "title": "《大侠金庸》 第1集 书剑少年" },
+            { "url": "https://tv.cctv.com/2025/06/24/VIDENgyW2HxOCwCJ8rN6zQmH250624.shtml", "title": "《看见皮洛》 第1集 发现" },
+            { "url": "https://tv.cctv.com/2025/06/25/VIDE9G7XfVD33i4UaiRx4u9V250625.shtml", "title": "《国家记忆》 20250625 新中国禁毒之路 根除烟毒" },
+            { "url": "https://tv.cctv.com/2025/06/25/VIDEVHzFEzWkbAMEf7DykRdL250625.shtml", "title": "《“字”从遇见你 第三季》 第18集 兔" },
+            { "url": "https://tv.cctv.com/2025/06/25/VIDEcEMewj6KEQgRKr8oyunC250625.shtml", "title": "《新闻1+1》 20250625 城市地下空间，如何安全度汛？" },
+            { "url": "https://tv.cctv.com/2025/06/25/VIDExRN85lbfw68CbnnpPz0C250625.shtml", "title": "《文脉春秋·历史文化名城篇》 第50集 陕西·韩城" },
+            { "url": "https://tv.cctv.com/2025/06/26/VIDECm393RmJ3zc9nhVnJrFL250626.shtml", "title": "[今日亚洲]伊朗重建核项目？特朗普：再打一次！" },
+            { "url": "https://tv.cctv.com/2025/06/27/VIDEO1oGJaz81BxzrrdU7NOO250627.shtml", "title": "[新闻直播间]神舟二十号乘组圆满完成第二次出舱活动" },
+            { "url": "https://tv.cctv.com/epg/index.shtml", "title": "节目单_CCTV节目官网_央视网" },
+            { "url": "https://tv.cctv.com/live/index.shtml", "title": "直播大全_CCTV节目官网_央视网" },
+            { "url": "https://tv.cctv.com/top/index.shtml", "title": "央视热榜_CCTV节目官网_央视网" },
+            { "url": "https://tv.cctv.com/yxg/index.shtml", "title": "央视片库_CCTV节目官网_央视网" },
+            { "url": "https://tv.cctv.com/yxg/index.shtml#datacid=dsj&datafl=&datadq=&fc=%E7%94%B5%E8%A7%86%E5%89%A7&datanf=&dataszm=", "title": "央视片库_CCTV节目官网_央视网" }
+        ];
+
+        function search() {
+            const query = document.getElementById('searchQuery').value.trim().toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            if (query) {
+                const filteredData = data.filter(item => 
+                    item.title.toLowerCase().includes(query) || 
+                    item.url.toLowerCase().includes(query)
+                );
+                
+                if (filteredData.length > 0) {
+                    filteredData.forEach(item => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.className = 'result';
+                        resultDiv.innerHTML = `
+                            <h3><a href="${item.url}" target="_blank">${item.title}</a></h3>
+                            <p>${item.url}</p>
+                        `;
+                        resultsDiv.appendChild(resultDiv);
+                    });
+                } else {
+                    resultsDiv.innerHTML = '<div class="no-results"><p>没有找到相关结果，请尝试其他关键词</p></div>';
+                }
+            } else {
+                resultsDiv.innerHTML = '<div class="no-results"><p>请输入搜索关键词</p></div>';
+            }
+        }
+        document.getElementById('searchQuery').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                search();
+            }
+        });
+    </script>
+</body>
+</html>
