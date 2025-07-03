@@ -3,7 +3,7 @@
 # 使用方法
 访问以下网址
 [https://zhanghengyu209278089.github.io/cpp_search/search.html](https://zhanghengyu209278089.github.io/cpp_search/search.html)
-## 爬虫代码我就放在这里了，由于是用C++写的，有点烂，大家将就着看吧
+## 爬虫代码我就放在这里了(只能在Windows上运行)，由于是用C++写的，有点烂，大家将就着看吧
 ### 这可是我写了一个月才搞出来的
 ```cpp
 #include <bits/stdc++.h>
